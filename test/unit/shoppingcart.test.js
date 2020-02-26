@@ -30,24 +30,29 @@ describe('ShoppingCart', () => {
 	const socks = new Product("SOCKS", "Crew socks", 500);
 	const discountSocks = new Product("CHEAPSOCKS", "Cheap crew socks", 500, 300);
 
-	describe('...', () => {
+	describe('EmptyCart', () => {
 
 		const cart = new ShoppingCart(freeShippingQuoteService);
 		cart.updateShipping(shippingInfo);
+		const purchase = cart.toPurchase()
 
-		it('should ...', () => {
-
+		it('should be zero dollars', () => {
+			assert.equal(purchase.totalPrice, 0)
 		});
 	});
 
-	describe('...', () => {
+	describe('VolumeDiscounts', () => {
 
 		const cart = new ShoppingCart(freeShippingQuoteService);
 		cart.addProduct(shirt);
 		cart.updateShipping(shippingInfo);
 
-		it('should ...', () => {
 
+		it('should apply a discount to a purchase over $200', () => {
+			assert.equal(cart.toPurchase().totalPrice, shirt.price*0.8)
+		});
+		it('should apply a discount to a purchase over $100', () => {
+			assert.equal(cart.toPurchase().totalPrice, shirt.price*0.9)
 		});
 	});
 
